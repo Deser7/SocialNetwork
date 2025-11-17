@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct Post {
-    let id: UUID
+struct Post: Decodable {
+    let userId: Int?
+    let id: Int?
     let title: String?
-    let content: String?
-    let imageURL: URL?
+    let body: String?
 }
