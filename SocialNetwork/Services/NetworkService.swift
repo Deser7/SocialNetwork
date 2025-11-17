@@ -12,10 +12,8 @@ final class NetworkService {
     
     private init() {}
     
-    private let baseURL = "https://jsonplaceholder.typicode.com"
-    
     func fetchPosts() async throws -> [Post] {
-        guard let url = URL(string: "\(baseURL)/posts") else {
+        guard let url = APIEnum.postsURL else {
             throw URLError(.badURL)
         }
         
