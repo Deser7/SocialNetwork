@@ -13,3 +13,9 @@ struct Post: Decodable, Identifiable {
     let title: String?
     let body: String?
 }
+
+extension Post {
+    var avatarURL: URL? {
+        userId.flatMap { URL(string: "https://picsum.photos/seed/user\($0)/100/100") }
+    }
+}

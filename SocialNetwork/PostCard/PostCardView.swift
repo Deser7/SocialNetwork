@@ -16,10 +16,25 @@ struct PostCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(viewModel.post.title ?? "")
+            
+            AsyncImage(url: viewModel.post.avatarURL) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+            } placeholder: {
+                Circle()
+                    .fill(Color.blue.opacity(0.3))
+                    .overlay {
+                        Text("\(viewModel.post.userId ?? 0)")
+                            .font(.caption)
+                    }
+            }
+            .frame(width: 40, height: 40)
+            .clipShape(Circle())
+            Text(viewModel.post.title ?? "Title")
                 .font(.headline)
             
-            Text(viewModel.post.body ?? "")
+            Text(viewModel.post.body ?? "Body")
                 .font(.body)
                 .foregroundStyle(.secondary)
             
@@ -38,7 +53,7 @@ struct PostCardView: View {
             userId: 1,
             id: 1,
             title: "Title",
-            body: "qwertyuiopasdfghjklzxcvbnm"
+            body: "BodyBodyBodyBodyBodyBodyBodyBody"
         )
     )
 }
