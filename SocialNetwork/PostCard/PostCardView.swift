@@ -27,6 +27,7 @@ struct PostCardView: View {
                 Image(systemName: viewModel.isLiked ? "heart.fill" : "heart.fill")
                     .foregroundStyle(viewModel.isLiked ? .red : .secondary)
             }
+            .buttonStyle(.plain)
         }
     }
 }
