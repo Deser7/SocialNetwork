@@ -7,17 +7,24 @@
 
 import Foundation
 import Observation
+import SwiftData
 
 @Observable
 final class PostCardViewModel {
-    var isLiked = false
     let post: Post
+    private var modelContext: ModelContext?
     
-    init(post: Post) {
+    init(post: Post, modelContext: ModelContext? = nil) {
         self.post = post
+        self.modelContext = modelContext
+    }
+    
+    func setModelContext(_ context: ModelContext) {
+        self.modelContext = context
     }
     
     func toggleLike() {
-        isLiked.toggle()
+        post.isLiked.toggle()
+        try? modelContext?.save()
     }
 }

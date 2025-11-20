@@ -5,6 +5,7 @@
 //  Created by Наташа Спиридонова on 17.11.2025.
 //
 
+import SwiftData
 import SwiftUI
 
 @main
@@ -13,5 +14,6 @@ struct SocialNetworkApp: App {
         WindowGroup {
             PostsView()
         }
+        .modelContainer(for: Post.self)
     }
 }

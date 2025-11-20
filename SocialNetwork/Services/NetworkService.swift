@@ -17,13 +17,14 @@ final class NetworkService {
             throw URLError(.badURL)
         }
         
-        let (data, responce) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await URLSession.shared.data(from: url)
         
-        guard let httpResponce = responce as? HTTPURLResponse,
-              (200..<300).contains(httpResponce.statusCode) else {
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200..<300).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
         }
         
-        return try JSONDecoder().decode([Post].self, from: data)
+        let dtos = try JSONDecoder().decode([PostDTO].self, from: data)
+        return dtos.map { Post(from: $0)}
     }
 }
