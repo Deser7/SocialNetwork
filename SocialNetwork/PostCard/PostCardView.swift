@@ -41,7 +41,12 @@ struct PostCardView: View {
                 .foregroundStyle(.secondary)
             
             Button(action: { viewModel.toggleLike() }) {
-                Image(systemName: "heart.fill")
+                Label(
+                    "\(viewModel.post.likesCount)",
+                    systemImage: "heart.fill"
+                )
+  //              Image(systemName: "heart.fill")
+                .labelStyle(.titleAndIcon)
                     .foregroundStyle(viewModel.post.isLiked ? .red : .secondary)
             }
             .buttonStyle(.plain)

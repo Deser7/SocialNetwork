@@ -15,6 +15,7 @@ final class Post: Identifiable {
     var title: String?
     var body: String?
     var isLiked = false
+    var likesCount = 0
     
     init(
         userId: Int?,

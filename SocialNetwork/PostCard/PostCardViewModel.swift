@@ -24,7 +24,12 @@ final class PostCardViewModel {
     }
     
     func toggleLike() {
-        post.isLiked.toggle()
+        if !post.isLiked {
+            post.likesCount = 1
+            post.isLiked.toggle()
+        } else {
+            post.likesCount += 1
+        }
         try? modelContext?.save()
     }
 }
