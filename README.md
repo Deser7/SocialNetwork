@@ -1,6 +1,8 @@
 # SocialNetwork
 
-![Screenshot](Screenshots/IMG_7065.PNG)
+<div align="center">
+  <img src="Screenshots/IMG_7065.PNG" width="600" alt="Screenshot" />
+</div>
 
 iOS приложение для просмотра постов с использованием SwiftUI и SwiftData.
 
