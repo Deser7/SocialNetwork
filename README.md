@@ -1,7 +1,7 @@
 # SocialNetwork
 
 <div align="center">
-  <img src="Screenshots/IMG_7065.PNG" width="600" alt="Screenshot" />
+  <img src="Screenshots/IMG_7065.PNG" width="300" alt="Screenshot" />
 </div>
 
 iOS приложение для просмотра постов с использованием SwiftUI и SwiftData.
