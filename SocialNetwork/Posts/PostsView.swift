@@ -14,39 +14,40 @@ struct PostsView: View {
     @Environment(\.modelContext) private var modelContext
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Group {
                 if viewModel.isLoading && viewModel.posts.isEmpty {
                     ProgressView("Loading...")
+                } else if viewModel.posts.isEmpty {
+                    ContentUnavailableView(
+                        "No Posts",
+                        image: "tray",
+                        description: Text("Pull to refresh")
+                    )
                 } else {
                     List(viewModel.posts) { post in
                         PostCardView(post: post)
                     }
+                    .listStyle(.plain)
                 }
             }
             .navigationTitle("Feed")
-            .task {
-                await viewModel.loadPosts(modelContext: modelContext)
-            }
-            .refreshable {
-                await viewModel.loadPosts(modelContext: modelContext)
-            }
+            .task { await loadPosts() }
+            .refreshable { await loadPosts() }
             .alert("Error", isPresented: $showAlert) {
-                Button("Refresh") {
-                    Task {
-                        await viewModel.loadPosts(modelContext: modelContext)
-                    }
-                }
+                Button("Refresh") { Task { await loadPosts() } }
                 Button("OK", role: .cancel) {}
             } message: {
-                if let error = viewModel.errorMessage {
-                    Text(error)
-                }
+                Text(viewModel.errorMessage ?? "Unknown error")
             }
             .onChange(of: viewModel.errorMessage) { _, newValue in
                 showAlert = newValue != nil
             }
         }
+    }
+    
+    private func loadPosts() async {
+        await viewModel.loadPosts(modelContext: modelContext)
     }
 }
 
