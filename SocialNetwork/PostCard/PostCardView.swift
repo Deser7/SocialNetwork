@@ -19,7 +19,7 @@ struct PostCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             
-            AsyncImage(url: viewModel.post.avatarURL) { image in
+            AsyncImage(url: viewModel.avatarURL) { image in
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -27,27 +27,23 @@ struct PostCardView: View {
                 Circle()
                     .fill(Color.blue.opacity(0.3))
                     .overlay {
-                        Text("\(viewModel.post.userId ?? 0)")
+                        Text(viewModel.userId)
                             .font(.caption)
                     }
             }
             .frame(width: 40, height: 40)
             .clipShape(Circle())
-            Text(viewModel.post.title ?? "Title")
+            Text(viewModel.title)
                 .font(.headline)
             
-            Text(viewModel.post.body ?? "Body")
+            Text(viewModel.body)
                 .font(.body)
                 .foregroundStyle(.secondary)
             
             Button(action: { viewModel.toggleLike() }) {
-                Label(
-                    "\(viewModel.post.likesCount)",
-                    systemImage: "heart.fill"
-                )
-  //              Image(systemName: "heart.fill")
+                Label(viewModel.likeCount, systemImage: viewModel.icon)
                 .labelStyle(.titleAndIcon)
-                    .foregroundStyle(viewModel.post.isLiked ? .red : .secondary)
+                    .foregroundStyle(viewModel.isLiked ? .red : .secondary)
             }
             .buttonStyle(.plain)
         }

@@ -10,4 +10,8 @@ import Foundation
 enum APIEnum {
     static let baseURL = "https://jsonplaceholder.typicode.com"
     static let postsURL = URL(string: "\(baseURL)/posts")
+    
+    static func avatarURL(for userId: Int) -> URL? {
+        URL(string: "https://picsum.photos/seed/user\(userId)/100/100")
+    }
 }

@@ -41,6 +41,6 @@ extension Post {
     }
     
     var avatarURL: URL? {
-        userId.flatMap { URL(string: "https://picsum.photos/seed/user\($0)/100/100") }
+        userId.flatMap { APIEnum.avatarURL(for: $0) }
     }
 }

@@ -11,8 +11,33 @@ import SwiftData
 
 @Observable
 final class PostCardViewModel {
-    let post: Post
+    private let post: Post
     private var modelContext: ModelContext?
+    
+    let icon = "heart.fill"
+    var isLiked: Bool {
+        post.isLiked
+    }
+    
+    var avatarURL: URL? {
+        post.avatarURL
+    }
+    
+    var title: String {
+        post.title ?? "Title"
+    }
+    
+    var body: String {
+        post.body ?? "Body"
+    }
+    
+    var userId: String {
+        "\(post.userId ?? 0)"
+    }
+    
+    var likeCount: String {
+        "\(post.likesCount)"
+    }
     
     init(post: Post, modelContext: ModelContext? = nil) {
         self.post = post
