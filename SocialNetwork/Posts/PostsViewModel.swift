@@ -19,33 +19,17 @@ final class PostsViewModel {
     func loadPosts(modelContext: ModelContext) async {
         isLoading = true
         errorMessage = nil
+        defer { isLoading = false }
         
         do {
             let fetchedPosts = try await NetworkService.shared.fetchPosts()
-            let cachedPosts = try? modelContext.fetch(FetchDescriptor<Post>())
-            let cachedIds = Set(cachedPosts?.compactMap { $0.id } ?? [])
-            
-            for fetchedPost in fetchedPosts {
-                guard let postId = fetchedPost.id else { continue }
-                
-                if let cachedPost = cachedPosts?.first(where: { $0.id == postId }) {
-                    cachedPost.userId = fetchedPost.userId
-                    cachedPost.title = fetchedPost.title
-                    cachedPost.body = fetchedPost.body
-                } else if !cachedIds.contains(postId) {
-                    modelContext.insert(fetchedPost)
-                }
-            }
-            
-            try? modelContext.save()
-            
-            await loadFromCache(modelContext: modelContext)
+            syncPosts(fetchedPosts, with: modelContext)
+            try modelContext.save()
         } catch {
             errorMessage = error.localizedDescription
-            await loadFromCache(modelContext: modelContext)
         }
         
-        isLoading = false
+        await loadFromCache(modelContext: modelContext)
     }
     
     @MainActor
@@ -53,8 +37,34 @@ final class PostsViewModel {
         let descriptor = FetchDescriptor<Post>(
             sortBy: [SortDescriptor(\.id, order: .forward)]
         )
-        if let cachedPosts = try? modelContext.fetch(descriptor) {
-            posts = cachedPosts
+        
+        do {
+            posts = try modelContext.fetch(descriptor)
+        } catch {
+            print("Ошибка загрузки из кэша: \(error.localizedDescription)")
+            posts = []
+        }
+    }
+    
+    private func syncPosts(_ fetchedPosts: [Post], with context: ModelContext) {
+        let cachedPosts = (try? context.fetch(FetchDescriptor<Post>())) ?? []
+        let cachedPostsDictionary = Dictionary(
+            uniqueKeysWithValues: cachedPosts.compactMap { post -> (Int, Post)? in
+                guard let id = post.id else { return nil }
+                return (id, post)
+            }
+        )
+        
+        for fetchedPost in fetchedPosts {
+            guard let postId = fetchedPost.id else { continue }
+            
+            if let cachedPost = cachedPostsDictionary[postId] {
+                cachedPost.userId = fetchedPost.userId
+                cachedPost.title = fetchedPost.title
+                cachedPost.body = fetchedPost.body
+            } else {
+                context.insert(fetchedPost)
+            }
         }
     }
 }
