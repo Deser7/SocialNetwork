@@ -1,5 +1,7 @@
 # SocialNetwork
 
+![Screenshot](Screenshots/IMG_7065.PNG)
+
 iOS приложение для просмотра постов с использованием SwiftUI и SwiftData.
 
 ## Технологии
